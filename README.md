@@ -81,8 +81,10 @@ od.download(dataset_url)
 ```
 ├── Telco-Customer-Churn-Prediction-Model.ipynb  # Main analysis notebook
 ├── telco-customer-churn/                        # Dataset folder (downloaded)
+│   └── WA_Fn-UseC_-Telco-Customer-Churn.csv     # Dataset CSV file
 ├── README.md                                     # This documentation file
 └── requirements.txt                              # Python dependencies
+
 ```
 
 ---
