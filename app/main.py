@@ -4,18 +4,16 @@ import pandas as pd
 import tensorflow as tf
 import numpy as np
 import joblib
-
-# Triggering GitHub Actions test run
-# Triggering GitHub Actions test run
+import os
 
 app = FastAPI()
 
-# Load model and transformers
-model = tf.keras.models.load_model("app/churn_model.keras", compile=False)
-scaler = joblib.load("app/scaler.pkl")
-input_cols = joblib.load("app/input_cols.pkl")
+# Safe loading using relative paths
+BASE_DIR = os.path.dirname(__file__)
+model = tf.keras.models.load_model(os.path.join(BASE_DIR, "churn_model.keras"), compile=False)
+scaler = joblib.load(os.path.join(BASE_DIR, "scaler.pkl"))
+input_cols = joblib.load(os.path.join(BASE_DIR, "input_cols.pkl"))
 
-# Input data model
 class CustomerData(BaseModel):
     customerID: str
     gender: str
@@ -38,18 +36,12 @@ class CustomerData(BaseModel):
     monthlycharges: float
     totalcharges: float
 
-# Preprocessing helper
 def preprocess(data: CustomerData):
     df = pd.DataFrame([data.dict()])
-
-    # Drop customerID from prediction
     df.drop("customerID", axis=1, inplace=True)
-
-    # Normalize No phone/internet service to No
     df.replace('No phone service', 'No', inplace=True)
     df.replace('No internet service', 'No', inplace=True)
 
-    # Manual conversion
     yes_no_cols = [
         "partner", "dependents", "phoneservice", "multiplelines",
         "onlinesecurity", "onlinebackup", "deviceprotection", "techsupport",
@@ -58,17 +50,12 @@ def preprocess(data: CustomerData):
     df[yes_no_cols] = df[yes_no_cols].replace({"Yes": 1, "No": 0})
     df["gender"] = df["gender"].replace({"Male": 1, "Female": 0})
 
-    # Scale numeric columns
     num_cols = ["tenure", "monthlycharges", "totalcharges"]
     df[num_cols] = scaler.transform(df[num_cols])
 
-    # One-hot encode selected categorical columns
     cat_cols = ["internetservice", "contract", "paymentmethod"]
     df = pd.get_dummies(df, columns=cat_cols)
-
-    # Reindex to match training columns
     df = df.reindex(columns=input_cols, fill_value=0)
-
     return df
 
 @app.get("/")
