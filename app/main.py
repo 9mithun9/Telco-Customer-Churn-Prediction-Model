@@ -10,7 +10,7 @@ app = FastAPI()
 
 # Safe loading using relative paths
 BASE_DIR = os.path.dirname(__file__)
-model = tf.keras.models.load_model("churn_model.h5", compile=False)
+model = tf.keras.models.load_model(os.path.join(BASE_DIR, "churn_model.h5"), compile=False)
 scaler = joblib.load(os.path.join(BASE_DIR, "scaler.pkl"))
 input_cols = joblib.load(os.path.join(BASE_DIR, "input_cols.pkl"))
 
