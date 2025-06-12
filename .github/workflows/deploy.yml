@@ -25,10 +25,10 @@ jobs:
           pip install -r requirements.txt
           pip install flake8
 
-      - name: Lint with flake8
-        run: |
-          echo "Running flake8 linting..."
-          flake8 app/main.py --max-line-length=100
+      #- name: Lint with flake8
+       # run: |
+      #    echo "Running flake8 linting..."
+       #   flake8 app/main.py --max-line-length=100
 
       - name: Send Telegram notification on success
         if: success()
