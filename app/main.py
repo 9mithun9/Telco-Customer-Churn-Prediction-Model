@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import pandas as pd
 import tensorflow as tf
+import numpy as np
 import joblib
 
 # Triggering GitHub Actions test run
