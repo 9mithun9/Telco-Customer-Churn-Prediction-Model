@@ -10,9 +10,9 @@ import joblib
 app = FastAPI()
 
 # Load model and transformers
-model = tf.keras.models.load_model("churn_model.keras")
-scaler = joblib.load("scaler.pkl")
-input_cols = joblib.load("input_cols.pkl")
+model = tf.keras.models.load_model("app/churn_model.keras")
+scaler = joblib.load("app/scaler.pkl")
+input_cols = joblib.load("app/input_cols.pkl")
 
 # Input data model
 class CustomerData(BaseModel):
